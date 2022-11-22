@@ -3,6 +3,8 @@ from random import choice
 from random import randint
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.interpolate import interp1d
+# для графика
 import time
 # не справился только со временем pygame
 
@@ -147,5 +149,40 @@ while not finished:
             finished = True
 
 pygame.quit()
-plt.plot(time_arr, count_arr)
+
+
+# график
+
+f_interp = interp1d(time_arr , count_arr, bounds_error=False)
+x = np.arange(0, int(time.time()-start_time), 1)
+#plt.plot(np.array(time_arr), np.array(count_arr) )
+plt.plot(x, f_interp(x))
+plt.xlabel(r'$time$', fontsize=14)
+plt.ylabel(r'$infected$', fontsize=14)
+plt.grid(True)
+plt.legend(loc='best', fontsize=12)
+plt.savefig('figures/figure_with_legend.png')
 plt.show()
+
+'''
+plt.scatter(np.array(time_arr), np.array(count_arr))
+plt.savefig('figures/figure_with_legend.png')
+plt.show()
+
+p_f = np.poly1d(np.array(time_arr), np.array(count_arr))
+p, v = np.polyfit(time_arr, count_arr, deg=5, cov=True)
+plt.plot(arr)
+plt.show()
+'''
+
+
+''' plt.plot(np.array([0,100]), p_f(np.array([0,100])))
+plt.xlabel(r'$time$', fontsize=14)
+plt.ylabel(r'$infected$', fontsize=14)
+plt.grid(True)
+plt.legend(loc='best', fontsize=12)
+plt.savefig('figures/figure_with_legend.png')
+plt.show()'''
+
+
+
