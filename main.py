@@ -10,6 +10,12 @@ import time
 
 import pygame
 
+def randch(prob):
+    N = randint(0, 100)
+    if N <= prob*100:
+        return True
+    else:
+        return False
 
 FPS = 30
 RED = 0xFF0000
@@ -28,7 +34,7 @@ HEIGHT = 400
 
 
 class Mob:
-    def __init__(self, screen: pygame.Surface, x, y, color=BLACK, probab = 0.1):
+    def __init__(self, screen: pygame.Surface, x, y, color=BLACK, probab = 0.01):
         self.x = x
         self.y = y
         self.r = 3
@@ -42,8 +48,9 @@ class Mob:
         self.screen = screen
         self.probab = probab        
         self.immu = False
-        
-    
+        self.time = 0
+        self.timetogetwell = 10
+        self.timeinffirst = 0
         
     def draw(self):
         if self.inf:
@@ -51,7 +58,11 @@ class Mob:
             self.color = RED
             pygame.draw.circle(self.screen, RED, 
                                (self.x, self.y), self.rinf, 1)
-        
+        elif self.immu == True:
+            self.color = GREEN
+        else:
+            self.color = BLACK
+            
         pygame.draw.circle(
             self.screen,
             self.color,
@@ -61,13 +72,19 @@ class Mob:
         
         
     def move(self, dt):
-        self.vx = randint(-10,10)/10
+        self.vx = randint(-10,10)/10 #+ randint(-1, 1)*0.1
         self.vy = randint(-10,10)/10
         self.x += self.vx * dt
         self.y += self.vy * dt
         self.x = self.x % WIDTH
         self.y = self.y % HEIGHT
-        
+    
+    def get_well(self):
+        if self.time >= self.timetogetwell:
+            randch(0.00001)
+            self.inf = False
+            self.immu = True
+            
         #self.vx += self.ax*dt
         
         #self.vy += self.ay*dt
@@ -109,6 +126,12 @@ pers[0].inf = True
 # pers[0].color = MAGENTA
 counter = 0
 
+# задание начального времени по умолчанию у всех
+for per in pers:
+    per.timeinffirst = start_time
+print(start_time)
+
+
 screen.fill(WHITE)
 while not finished:
     screen.fill(WHITE)
@@ -119,28 +142,33 @@ while not finished:
         
         per.move(dt)
         per.draw()
+        per.get_well()
+        
     
     # count для графика
     counter = 0
     for per in pers:
         if per.inf:
             counter += 1
-            
+        
     count_arr.append(counter)
     time_arr.append(int(time.time()-start_time))
     
     
-    
     for per1 in pers:
         if per1.inf == True:
+            per1.time = time.time()-per1.timeinffirst
+            
             for per2 in pers:
-                
+                if per2 == per1:
+                    continue
                 if (per1.x-per2.x)**2 + (per1.y-per2.y)**2 < (per1.rinf)**2:
-                    N = randint(0, 10000)
-                    # Обработка заражения с определенной вероятностью
-                    if N<= per2.probab*10000:
-                        per2.inf = True
+                    if randch(per2.probab):
+                        per2.inf = not per2.immu
+                        per2.timeinffirst = int(time.time())
                         
+    #print(pers[0].time)
+        
                         
     pygame.display.update()
     
