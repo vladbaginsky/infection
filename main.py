@@ -65,11 +65,13 @@ class Mob:
         self.vy = randint(-10,10)/10
         self.x += self.vx * dt
         self.y += self.vy * dt
-        
+        self.x = self.x % WIDTH
+        self.y = self.y % HEIGHT
         
         #self.vx += self.ax*dt
         
         #self.vy += self.ay*dt
+'''
         if (self.x > WIDTH - 5):
             self.x = WIDTH - 5
         if (self.x < 5):
@@ -78,7 +80,7 @@ class Mob:
             self.y = HEIGHT - 5
         if (self.y <  5):
             self.y =  5
-            
+'''           
     #def broun_move(self):
         #self.ax = randint(-2, 2)
         #self.ay = randint(-1, 1)
@@ -104,7 +106,7 @@ for i in range(100):
     pers.append(a)
 
 pers[0].inf = True
-
+# pers[0].color = MAGENTA
 counter = 0
 
 screen.fill(WHITE)
