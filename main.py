@@ -11,8 +11,9 @@ import time
 import pygame
 
 def randch(prob):
+    # нужна для обработки вероятности смерти
     N = randint(0, 100)
-    if N <= prob*100:
+    if N <= prob:
         return True
     else:
         return False
@@ -61,8 +62,9 @@ class Mob:
         self.timeinffirst = 0
         self.timetosymptoms = 5
         # время до появления симптомов
-        
-        #
+        self.flag = 0
+        self.deathprobability = 25
+        # вероятность смерти
         self.isolated = False
         # Если True, то изолируем его               
     def isolate(self):
@@ -93,8 +95,13 @@ class Mob:
                 # можно было бы это возвращать к значениям,
                 # которые ввел пользователь
                 
-    #def die(self):
-      #  if self.inf = True:
+    def die(self):
+        if self.inf == True:
+            if self.flag == 0:
+                if randch(self.deathprobability):  
+                    pers.remove(per)
+                    
+                self.flag = 1
             
                 
                 
@@ -187,7 +194,7 @@ while not finished:
         
         per.move(dt)
         per.draw()
-        #per.die()
+        per.die()
         per.isolate()
         
         if per.inf == True:
@@ -227,7 +234,7 @@ while not finished:
             finished = True
 
 pygame.quit()
-
+print(len(pers))
 # график
 
 f_interp = interp1d(time_arr , count_arr, bounds_error=False)
