@@ -214,6 +214,7 @@ class Mob(Inf_class):
                 self.broun = 10
                 self.speed = 0.5
         if self.isolation == "all":
+            
             self.isolated = True
             self.broun = 30
             self.speed = 0

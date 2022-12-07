@@ -64,6 +64,7 @@ for per in inf.pers:
     per.timetogetwell = inf.timetogetwell
     per.broun = inf.broun
     per.speed = inf.speed
+    per.isolation = inf.isolation
     
     
 inf.pers[0].inf = True
@@ -83,6 +84,7 @@ while not finished:
     dt = clock.tick()
     
     for per in inf.pers:
+        
         #print(per.WIDTH)
         per.move(dt)
         per.draw()
