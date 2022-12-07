@@ -28,16 +28,26 @@ from views import WIDTH, HEIGHT
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-inf = Inf_class(screen)
+inf = Inf_class(screen, 200)
 # создание обьекта инфекции 
+
+
+
+
+
+
+
+
+# всякие счетчики
+counter = 0
+time_allinfected = []
+
+inf.options_window(screen)
+#вызов меню
 
 
 clock = pygame.time.Clock()
 
-# для графика
-start_time = time.time()
-time_arr = []
-count_arr = []
 
 
 
@@ -45,15 +55,26 @@ for i in range(inf.amount):
     a = Mob(screen, randint(0, inf.WIDTH), randint(0, inf.HEIGHT))
     inf.pers.append(a)
 
+#Так же нельзя, чтобы наследовало от объекта, а не от класса? ааааааааааа
+# Поэтому будет так:
+for per in inf.pers:
+    per.rinf = inf.rinf
+    per.deathprobability = inf.deathprobability
+    per.timetosymptoms = inf.timetosymptoms
+    per.timetogetwell = inf.timetogetwell
+    per.broun = inf.broun
+    per.speed = inf.speed
+    
+    
 inf.pers[0].inf = True
 
-counter = 0
-
+# для графика
+start_time = time.time()
+time_arr = []
+count_arr = []
 # задание начального времени по умолчанию у всех
 for per in inf.pers:
     per.timeinffirst = start_time
-
-
 
 screen.fill(WHITE)
 while not finished:
@@ -62,7 +83,7 @@ while not finished:
     dt = clock.tick()
     
     for per in inf.pers:
-        
+        #print(per.WIDTH)
         per.move(dt)
         per.draw()
         inf.per = per.die(inf.pers)
@@ -79,8 +100,14 @@ while not finished:
             counter += 1
     
     
+    
     count_arr.append(counter)
     time_arr.append(int(time.time()-start_time))
+    
+    if len(time_allinfected)==0:
+        if counter == 0:
+            time_allinfected.append(time_arr[-1])
+            print(time_allinfected[0])
     
     
     for per1 in inf.pers:
@@ -93,7 +120,7 @@ while not finished:
                     per2.inf = not per2.immu
                     per2.timeinffirst = int(time.time())
                         
-    #print(pers[0].time)
+    
         
                         
     pygame.display.update()
