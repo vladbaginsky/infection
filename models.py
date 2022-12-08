@@ -30,6 +30,7 @@ from views import WIDTH, HEIGHT
 class Inf_class:
     def __init__(self, screen: pygame.Surface, amount=100):
         self.pers = []
+        self.time = "не окончена"
         # если isolation only infected, то изолируем после появления симптомов,
         # если no isolation - никого никогда не изолируем,
         # если isolation == all - изолируем всех с самого начала
@@ -40,7 +41,7 @@ class Inf_class:
         self.deathprobability = 15
         # вероятность смерти
         self.screen = screen
-        self.rinf = 6
+        self.rinf = 16
         self.r = 3
         self.timetogetwell = 25
         self.timetosymptoms = 5
@@ -49,6 +50,7 @@ class Inf_class:
         # скорость отвечающая за то, как далеко ходят люди, от 0 до 1
         self.speed = 0.5
         # время до появления симптомов
+    
     def options_window(self, screen):
                 
         screen.fill(WHITE)
@@ -166,7 +168,39 @@ class Inf_class:
                     if event.key == pygame.K_SPACE:
                         stop = True
             pygame.display.update()
+    def finish_window(self, screen):
+        screen.fill(WHITE)
+        stop = 0
+        f1 = pygame.font.Font(None, 36)
+        f2 = pygame.font.Font(None, 20)
+        while not stop:
+            screen.fill(WHITE)
+            text0 = f1.render('Население ' + str(self.amount), 4, (180, 0, 0))
+            screen.blit(text0, (10, 20))
+            text1 = f1.render('Количество выживших ' + str(len(self.pers)), 4, (180, 0, 0))
+            screen.blit(text1, (10, 50))
+            text2 = f1.render('Длительность эпидемии: ' + str(self.time), 4, (180, 0, 0))
+            screen.blit(text2, (10, 80))
+            if self.time == 0:
+                text2 = f1.render('Вирус убил первого своего носителя, никого не заразив ', 1, (210, 0, 0))
+                screen.blit(text2, (10, 110))
+            text4 = f1.render('График figure.png сохранен ', 4, (180, 0, 0))
+            screen.blit(text4, (10, 140))
+            ok = f1.render('Завершить ', 4, (180, 0, 0))
+            screen.blit(ok, (400, 400))
+
+            
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = event.pos
+                    if (x-400)**2 + (y-400)**2 < 75**2:
+                        stop = True
+                if event.type == pygame.QUIT:
+                    stop = True
+            
 class Mob(Inf_class):
+    
     def __init__(self,screen, x, y, color=BLACK):
         super().__init__(screen)
         self.x = x

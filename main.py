@@ -85,7 +85,7 @@ while not finished:
     
     for per in inf.pers:
         
-        #print(per.WIDTH)
+        
         per.move(dt)
         per.draw()
         inf.per = per.die(inf.pers)
@@ -108,9 +108,12 @@ while not finished:
     
     if len(time_allinfected)==0:
         if counter == 0:
+            
             time_allinfected.append(time_arr[-1])
+            inf.time = time_arr[-1]
             print(time_allinfected[0])
     
+            
     
     for per1 in inf.pers:
         per1.time = time.time()-per1.timeinffirst
@@ -132,9 +135,9 @@ while not finished:
         
         if event.type == pygame.QUIT:
             finished = True
-
+inf.finish_window(screen)
 pygame.quit()
-print(len(inf.pers))
+#print(len(inf.pers))
 # график
 
 f_interp = interp1d(time_arr , count_arr, bounds_error=False)
@@ -145,7 +148,7 @@ plt.xlabel(r'$time$', fontsize=14)
 plt.ylabel(r'$infected$', fontsize=14)
 plt.grid(True)
 plt.legend(loc='best', fontsize=12)
-plt.savefig('figures/figure_with_legend.png')
+plt.savefig('figures/figure.png')
 plt.show()
 
 '''
