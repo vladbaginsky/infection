@@ -21,21 +21,15 @@ import time
 # не справился только со временем pygame
 import pygame
 finished = False
-from models import Inf_class, Mob
+from models import Inf, Mob
 pygame.init()
 
 from views import WIDTH, HEIGHT
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-inf = Inf_class(screen, 200)
+inf = Inf(screen, 20)
 # создание обьекта инфекции 
-
-
-
-
-
-
 
 
 # всякие счетчики
@@ -52,11 +46,10 @@ clock = pygame.time.Clock()
 
 
 for i in range(inf.amount):
-    a = Mob(screen, randint(0, inf.WIDTH), randint(0, inf.HEIGHT))
+    a = Mob(inf.r, screen, randint(0, inf.WIDTH), randint(0, inf.HEIGHT))
     inf.pers.append(a)
 
-#Так же нельзя, чтобы наследовало от объекта, а не от класса? ааааааааааа
-# Поэтому будет так:
+
 for per in inf.pers:
     per.rinf = inf.rinf
     per.deathprobability = inf.deathprobability
@@ -88,7 +81,7 @@ while not finished:
         
         per.move(dt)
         per.draw()
-        inf.per = per.die(inf.pers)
+        per.die(inf.pers, time.time(), inf.timetogetwell)
         per.isolate()
         
         if per.inf == True:
@@ -121,7 +114,7 @@ while not finished:
             for per2 in inf.pers:
                 if per2.inf == True:
                     continue
-                if (per1.x-per2.x)**2 + (per1.y-per2.y)**2 < (per1.rinf)**2:
+                if (per1.x-per2.x)**2 + (per1.y-per2.y)**2 < (inf.rinf)**2:
                     per2.inf = not per2.immu
                     per2.timeinffirst = int(time.time())
                         

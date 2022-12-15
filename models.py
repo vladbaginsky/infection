@@ -27,8 +27,8 @@ from views import WIDTH, HEIGHT
 # если isolation == all - изолируем всех с самого начала
 # isolation = "only infected"
 
-class Inf_class:
-    def __init__(self, screen: pygame.Surface, amount=100):
+class Inf:
+    def __init__(self, screen: pygame.Surface, amount=200):
         self.pers = []
         self.time = "не окончена"
         # если isolation only infected, то изолируем после появления симптомов,
@@ -50,64 +50,78 @@ class Inf_class:
         # скорость отвечающая за то, как далеко ходят люди, от 0 до 1
         self.speed = 0.5
         # время до появления симптомов
-    
+    def button(self, screen, text, num, col, pos):
+        f1 = pygame.font.Font(None, 36)
+        text1 = f1.render(text, num, (180, 0, 0) )
+        screen.blit(text1, pos)
+    def button_plus(self, screen, pos):
+        f1 = pygame.font.Font(None, 36)
+        text1 = f1.render("+", 4, (180, 0, 0))
+        screen.blit(text1, pos)
+    def button_minus(self, screen, pos):
+        f1 = pygame.font.Font(None, 36)
+        text1 = f1.render("-", 4, (180, 0, 0))
+        screen.blit(text1, pos)
     def options_window(self, screen):
                 
         screen.fill(WHITE)
         stop = 0
-        f1 = pygame.font.Font(None, 36)
+        
+        
         while not stop:
             screen.fill(WHITE)
             #dt = clock.tick()             
             
             
+            self.button(screen, 'Самоизоляция ' + str(self.isolation),
+                        4, (180, 0, 0), (10, 50))
+            self.button(screen, 'Количество ' + str(self.amount), 4,
+                        (180, 0, 0), (10, 80))
+            self.button(screen, 'Радиус инфицирования ' + str(self.rinf),
+                        4, (180, 0, 0), (10, 110))
+            self.button(screen,
+                        'Вероятность смерти ' + str(self.deathprobability),
+                              4, (180, 0, 0), (10, 140))
+            self.button(screen,
+                    'Время до появления симптомов ' + str(self.timetosymptoms),
+                              4, (180, 0, 0), (10, 170))
+            self.button(screen, 
+                        'Время до выздоровления ' + str(self.timetogetwell),
+                              4, (180, 0, 0), (10, 200))
+            self.button(screen,
+                    'Амплитуда Броуновского движения(>0) ' + str(self.broun),
+                              4, (180, 0, 0), (10, 230))
+            self.button(screen, 
+         'Люди ходят в гости/посещают другие города (0-2)' + str(self.speed),
+                              4, (180, 0, 0), (10, 260))
             
-            text1 = f1.render('Самоизоляция ' + str(self.isolation), 4, (180, 0, 0))
-            text2 = f1.render('Количество ' + str(self.amount), 4, (180, 0, 0))
-            text3 = f1.render('Радиус инфицирования ' + str(self.rinf), 4, (180, 0, 0))
-            text4 = f1.render('Вероятность смерти ' + str(self.deathprobability),
-                              4, (180, 0, 0))
-            text5 = f1.render('Время до появления симптомов ' + str(self.timetosymptoms),
-                              4, (180, 0, 0))
-            text6 = f1.render('Время до выздоровления ' + str(self.timetogetwell),
-                              4, (180, 0, 0))
-            text7 = f1.render('Амплитуда Броуновского движения(>0) ' + str(self.broun),
-                              4, (180, 0, 0))
-            text8 = f1.render('Люди ходят в гости/посещают другие города (0-2)' + str(self.speed),
-                              4, (180, 0, 0))
             
-            textbutp = f1.render('+ ', 4, (180, 0, 0))
-            textbutm = f1.render('-', 4, (180, 0, 0))
+            self.button_plus(screen, (800, 50))
+            self.button_minus(screen, (770, 50))
+            
+            self.button_plus(screen, (800, 80))
+            self.button_minus(screen, (770, 80))
+            
+            self.button_plus(screen, (800, 110))
+            self.button_minus(screen, (770, 110))
+            
+            self.button_plus(screen, (800, 140))
+            self.button_minus(screen, (770, 140))
+            
+            self.button_plus(screen, (800, 170))
+            self.button_minus(screen, (770, 170))
+            
+            self.button_plus(screen, (800, 200))
+            self.button_minus(screen, (770, 200))
+            
+            self.button_plus(screen, (800, 230))
+            self.button_minus(screen, (770, 230))
+            
+            self.button_plus(screen, (800, 260))
+            self.button_minus(screen, (770, 260))
             
             
-            screen.blit(text1, (10, 50))
-            screen.blit(textbutp, (800, 50))
-            screen.blit(textbutm, (770, 50))
-            screen.blit(text2, (10, 80))
-            screen.blit(textbutp, (800, 80))
-            screen.blit(textbutm, (770, 80))
-            screen.blit(text3, (10, 110))
-            screen.blit(textbutp, (800, 110))
-            screen.blit(textbutm, (770, 110))
-            screen.blit(text4, (10, 140))
-            screen.blit(textbutp, (800, 140))
-            screen.blit(textbutm, (770, 140))
-            screen.blit(text5, (10, 170))
-            screen.blit(textbutp, (800, 170))
-            screen.blit(textbutm, (770, 170))
-            screen.blit(text6, (10, 200))
-            screen.blit(textbutp, (800, 200))
-            screen.blit(textbutm, (770, 200))
-            screen.blit(text7, (10, 230))
-            screen.blit(textbutp, (800, 230))
-            screen.blit(textbutm, (770, 230))
-            screen.blit(text8, (10, 260))
-            screen.blit(textbutp, (800, 260))
-            screen.blit(textbutm, (770, 260))
-            
-            ok = f1.render('старт ', 4, (180, 0, 0))
-            screen.blit(ok, (400, 400))
-            
+            self.button(screen, 'старт ', 4, (180, 0, 0), (400, 400))
             
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -169,25 +183,30 @@ class Inf_class:
                         stop = True
             pygame.display.update()
     def finish_window(self, screen):
+        
         screen.fill(WHITE)
         stop = 0
-        f1 = pygame.font.Font(None, 36)
-        f2 = pygame.font.Font(None, 20)
+        
+        
         while not stop:
+            
             screen.fill(WHITE)
-            text0 = f1.render('Население ' + str(self.amount), 4, (180, 0, 0))
-            screen.blit(text0, (10, 20))
-            text1 = f1.render('Количество выживших ' + str(len(self.pers)), 4, (180, 0, 0))
-            screen.blit(text1, (10, 50))
-            text2 = f1.render('Длительность эпидемии: ' + str(self.time), 4, (180, 0, 0))
-            screen.blit(text2, (10, 80))
+            self.button(screen, 'Население ' + str(self.amount),
+                        4, (180, 0, 0), (10, 20))
+            self.button(screen, 'Количество выживших ' + str(len(self.pers)),
+                        4, (180, 0, 0), (10, 50)) 
+            
+            self.button(screen, 'Длительность эпидемии: ' + str(self.time),
+                        4, (180, 0, 0), (10, 80))
+            
             if self.time == 0:
-                text2 = f1.render('Вирус убил первого своего носителя, никого не заразив ', 1, (210, 0, 0))
-                screen.blit(text2, (10, 110))
-            text4 = f1.render('График figure.png сохранен ', 4, (180, 0, 0))
-            screen.blit(text4, (10, 140))
-            ok = f1.render('Завершить ', 4, (180, 0, 0))
-            screen.blit(ok, (400, 400))
+                self.button(screen, 'Вирус убил первого своего носителя, никого не заразив ',
+                            1, (210, 0, 0), (10, 110))
+                self.button(screen, 'График figure.png сохранен ',
+                            4, (180, 0, 0), (10, 140))
+                self.button(screen, 'Завершить ',
+                            4, (180, 0, 0), (400, 400))
+    
 
             
             pygame.display.update()
@@ -199,13 +218,15 @@ class Inf_class:
                 if event.type == pygame.QUIT:
                     stop = True
             
-class Mob(Inf_class):
+class Mob():
     
-    def __init__(self,screen, x, y, color=BLACK):
-        super().__init__(screen)
+    def __init__(self, r,screen, x, y, color=BLACK):
+        self.r = r
+        self.WIDTH = WIDTH
+        self.HEIGHT = HEIGHT
         self.x = x
         self.y = y
-        
+        self.screen = screen
         self.vx = 0
         self.vy = 0
         self.ax = 0
@@ -255,12 +276,19 @@ class Mob(Inf_class):
                 # можно было бы это возвращать к значениям,
                 # которые ввел пользователь
                 
-    def die(self, pers):
+    def die(self, pers, time, time2):
         if self.inf == True:
-            if self.flag == 0:
+            if randch(50):
+                statement = True
+                # люди умирают в разное время болезни
+            else:
+                statement = (time - self.timeinffirst > time2)
+            if self.flag == 0 and statement:
                 if randch(self.deathprobability):  
                     pers.remove(self)
+                    
                     return pers
+                    
                     
                 self.flag = 1
             
