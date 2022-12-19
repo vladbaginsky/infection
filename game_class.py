@@ -4,18 +4,8 @@ from views import WIDTH, HEIGHT
 from mob_class import Mob
 import time
 
-
-FPS = 30
-RED = 0xFF0000
-BLUE = 0x0000FF
-YELLOW = 0xFFC91F
-GREEN = 0x00FF00
-MAGENTA = 0xFF03B8
-CYAN = 0x00FFCC
-BLACK = (0, 0, 0)
-WHITE = 0xFFFFFF
-GREY = 0x7D7D7D
-GAME_COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
+from views import WHITE
+from text_class import Text
 
 # если isolation only infected, то изолируем после появления симптомов,
 # если no isolation - никого никогда не изолируем,
@@ -72,6 +62,9 @@ class Inf:
                         per2.timeinffirst = int(time.time())
 
     def create_mobs(self):
+        
+        self.pers = []
+        print(self.amount)
         for i in range(self.amount):
             a = Mob(self.r, self.screen,
                     randint(0, self.WIDTH), randint(0, self.HEIGHT))
@@ -86,125 +79,77 @@ class Inf:
             per.speed = self.speed
             per.isolation = self.isolation
 
-    def button(self, text, num, col, pos):
-        f1 = pygame.font.Font(None, 36)
-        text1 = f1.render(text, num, (180, 0, 0))
-        self.screen.blit(text1, pos)
-
-    def button_plus(self,  pos):
-        f1 = pygame.font.Font(None, 36)
-        text1 = f1.render("+", 4, (180, 0, 0))
-        self.screen.blit(text1, pos)
-
-    def button_minus(self,  pos):
-        f1 = pygame.font.Font(None, 36)
-        text1 = f1.render("-", 4, (180, 0, 0))
-        self.screen.blit(text1, pos)
-
     def options_window(self,):
 
         self.screen.fill(WHITE)
         stop = 0
-
+        
+        t = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+        
+        t[0] = Text(self.screen, 'label', 'Самоизоляция ', 50, self.isolation)
+        t[1] = Text(self.screen, 'label', 'Количество ', 80, self.amount, 10)
+        t[2] = Text(self.screen, 
+                    'label', 'Радиус инфицирования ', 110, self.rinf, 2)
+        t[3] = Text(self.screen, 'label', 'Вероятность смерти ', 140,
+                    self.deathprobability, 5)
+        t[4] = Text(self.screen, 'label', 'Время до появления ' +
+                    'симптомов ', 170, self.timetosymptoms , 5)
+        t[5] = Text(self.screen, 'label', 'Время до выздоровления ', 200,
+                    self.timetogetwell, 2)
+        t[6] = Text(self.screen, 'label', 'Амплитуда Броуновского '+
+                  'движения(>0) ', 230, self.broun, 10)
+        t[7] = Text(self.screen, 'label', 'Люди ходят в гости/посещают'+
+                  ' другие города (0-2)', 260, self.speed, 5)
+        t[8] = Text(self.screen, 'but', 'старт ', 400)
+        
+        t[8].pos_x = 400
+        t[8].r = 70
         while not stop:
+            
             self.screen.fill(WHITE)
-
-            self.button('Самоизоляция ' + str(self.isolation),
-                        4, (180, 0, 0), (10, 50))
-            self.button('Количество ' + str(self.amount), 4,
-                        (180, 0, 0), (10, 80))
-            self.button('Радиус инфицирования ' + str(self.rinf), 4,
-                        (180, 0, 0), (10, 110))
-            self.button('Вероятность смерти ' +
-                        str(self.deathprobability), 4, (180, 0, 0), (10, 140))
-            self.button('Время до появления ' +
-                        'симптомов ' + str(self.timetosymptoms),
-                        4, (180, 0, 0), (10, 170))
-            self.button('Время до выздоровления ' +
-                        str(self.timetogetwell), 4, (180, 0, 0), (10, 200))
-            self.button('Амплитуда Броуновского движения(>0) ' +
-                        str(self.broun), 4, (180, 0, 0), (10, 230))
-            self.button('Люди ходят в' +
-                         ' гости/посещают другие города (0-2)' +
-                         str(self.speed), 4, (180, 0, 0), (10, 260))
-
-            self.button_plus((800, 50))
-            self.button_minus((770, 50))
-
-            self.button_plus((800, 80))
-            self.button_minus((770, 80))
-
-            self.button_plus((800, 110))
-            self.button_minus((770, 110))
-
-            self.button_plus((800, 140))
-            self.button_minus((770, 140))
-
-            self.button_plus((800, 170))
-            self.button_minus((770, 170))
-
-            self.button_plus((800, 200))
-            self.button_minus((770, 200))
-
-            self.button_plus((800, 230))
-            self.button_minus((770, 230))
-
-            self.button_plus((800, 260))
-            self.button_minus((770, 260))
-
-            self.button('старт ', 4, (180, 0, 0), (400, 400))
+            
+            t[0].new_text(self.isolation)
+            t[1].new_text(self.amount)
+            t[2].new_text(self.rinf)
+            t[3].new_text(self.deathprobability)
+            t[4].new_text(self.timetosymptoms)
+            t[5].new_text(self.timetogetwell)
+            t[6].new_text(self.broun)
+            t[7].new_text(self.speed)
+            
+            for element in t:
+                element.draw()
+            
 
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     x, y = event.pos
-
-                    if (x-800)**2 + (y-50)**2 < 15**2:
-
+                    if t[0].is_tap(x, y) == "+":
                         if self.isolation == "no":
                             self.isolation = "only infected"
                         elif self.isolation == "only infected":
                             self.isolation = "all"
                         elif self.isolation == "all":
                             self.isolation = "no"
-
-                    if (x-770)**2 + (y-50)**2 < 15**2:
+                    if t[0].is_tap(x, y) == "-":
                         if self.isolation == "only infected":
                             self.isolation = "no"
                         elif self.isolation == "no":
                             self.isolation = "all"
                         elif self.isolation == "all":
                             self.isolation = "only infected"
-                    if (x-800)**2 + (y-80)**2 < 15**2:
-                        self.amount += 10
-                    if (x-770)**2 + (y-80)**2 < 15**2:
-                        self.amount -= 10
-                    if (x-800)**2 + (y-110)**2 < 15**2:
-                        self.rinf += 1
-                    if (x-770)**2 + (y-110)**2 < 15**2:
-                        self.rinf -= 1
-                    if (x-800)**2 + (y-140)**2 < 15**2:
-                        self.deathprobability += 5
-                    if (x-770)**2 + (y-140)**2 < 15**2:
-                        self.deathprobability -= 5
-                    if (x-800)**2 + (y-170)**2 < 15**2:
-                        self.timetosymptoms += 5
-                    if (x-770)**2 + (y-170)**2 < 15**2:
-                        self.timetosymptoms -= 5
-                    if (x-800)**2 + (y-200)**2 < 15**2:
-                        self.timetogetwell += 5
-                    if (x-770)**2 + (y-200)**2 < 15**2:
-                        self.timetogetwell -= 5
-                    if (x-800)**2 + (y-230)**2 < 15**2:
-                        self.broun += 1
-                    if (x-770)**2 + (y-230)**2 < 15**2:
-                        self.broun -= 1
-                    if (x-800)**2 + (y-260)**2 < 15**2:
-                        self.speed += 0.2
-                    if (x-770)**2 + (y-260)**2 < 15**2:
-                        self.speed -= 0.2
-                    if (x-400)**2 + (y-400)**2 < 75**2:
-                        stop = True
-                    # я знаю что это ужасно
+                            
+                    self.amount = t[1].tap_processing(x, y) 
+                    self.rinf = t[2].tap_processing(x, y) 
+                    self.deathprobability = t[3].tap_processing(x, y) 
+                    self.timetosymptoms = t[4].tap_processing(x, y) 
+                    self.timetogetwell = t[5].tap_processing(x, y) 
+                    self.broun = t[6].tap_processing(x, y) 
+                    self.speed = t[7].tap_processing(x, y) 
+                    
+                    stop = t[8].is_tap(x, y)
+                        
+                    
                 if event.type == pygame.QUIT:
                     stop = True
                 if event.type == pygame.KEYDOWN:
@@ -218,39 +163,50 @@ class Inf:
             per.timeinffirst = start_time
 
     def finish_window(self, screen):
+        
         screen.fill(WHITE)
         stop = 0
-
+        
+        t= [0, 1, 2, 3, 4, 5, 6]
+        
+        t[0] = Text(self.screen, 'but', 'Население ' + str(self.amount), 20)
+        t[1] = Text(self.screen, 'but', 'Количество выживших ' +
+                    str(len(self.pers)), 50)
+        t[2] = Text(self.screen, 
+                    'but', 'Длительность эпидемии: ' + str(self.time),  80)
+        
+        t[3] = Text(self.screen, 'but', 'График сохранен figures/figure.png',
+                    170)
+        t[4] = Text(self.screen, 'but', 'Завершить ', 400)
+        t[5] = Text(self.screen, 'but', 'Заново ', 400)
+        t[4].r = 75
+        t[5].r = 75
+        t[4].pos_x = 310
+        t[5].pos_x = 470
+        t[6] = Text(self.screen, 'but', 'Вирус убил первого своего'+
+                    ' носителя,', 110)
+        
         while not stop:
 
             screen.fill(WHITE)
-            self.button('Население ' + str(self.amount),
-                        4, (180, 0, 0), (10, 20))
-            self.button('Количество выживших ' + str(len(self.pers)),
-                        4, (180, 0, 0), (10, 50))
-
-            self.button('Длительность эпидемии: ' + str(self.time),
-                        4, (180, 0, 0), (10, 80))
-            self.button('График сохранен figures/figure.png',
-                        4, (180, 0, 0), (10, 140))
-            self.button('Завершить ',
-                        4, (180, 0, 0), (330, 400))
-            self.button('Заново ',
-                        4, (180, 0, 0), (470, 400))
+            for element in t:
+                if element != t[6]:  
+                    element.draw()
             if self.time == 0:
-                self.button('Вирус убил первого своего носителя,' +
-                            ' никого не заразив ',
-                            1, (210, 0, 0), (10, 110))
+                t[6].draw()   
+            
+            
 
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     x, y = event.pos
-                    if (x-330)**2 + (y-400)**2 < 75**2:
+                    if t[5].is_tap(x, y):
+                        stop = True
+                        return False
+                    if t[4].is_tap(x,y):
                         stop = True
                         return True
-                    if (x-470)**2 + (y-400)**2 < 75**2:
-                        stop = True
                 if event.type == pygame.QUIT:
                     stop = True
                     return True
