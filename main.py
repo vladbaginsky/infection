@@ -32,9 +32,9 @@ while not end:
     # всякие счетчики
     counter = 0
     time_allinfected = []
+    
     inf.options_window()
     # вызов меню
-    # print(str(inf.amount) + 'sd')
     clock = pygame.time.Clock()
 
     inf.create_mobs()
@@ -75,7 +75,6 @@ while not end:
 
                 time_allinfected.append(time_arr[-1])
                 inf.time = time_arr[-1]
-                #print(time_allinfected[0])
 
         pygame.display.update()
 
@@ -84,7 +83,6 @@ while not end:
                 x, y = event.pos
                 if stop_lable.tap_processing(x, y):
                     finished = True
-                    
                     
             if event.type == pygame.QUIT:
                 finished = True

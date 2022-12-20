@@ -28,12 +28,12 @@ class Text():
     def button_plus(self):
         
         text1 = self.f.render("+", self.num, self.col)
-        self.screen.blit(text1, [800, self.pos+5])
+        self.screen.blit(text1, [800, self.pos])
 
     def button_minus(self):
         
         text1 = self.f.render("-", 4, self.col)
-        self.screen.blit(text1, [770, self.pos+5])
+        self.screen.blit(text1, [770, self.pos])
     
     def draw(self):
         if self.but_type == "but":
@@ -52,29 +52,28 @@ class Text():
                 return True
         if self.but_type == "label":
             if (x-770)**2 + (y-self.pos)**2 < self.r**2:
-                print(self.pos)
                 return '-'
             if (x-800)**2 + (y-self.pos)**2 < self.r**2:
                 return '+'
         return False
-        
+    
     def tap_processing(self, x, y):
         if self.but_type == "but":
             if self.is_tap(x, y):
-                
+
                 return True
         if self.but_type == "label":
             if self.is_tap(x, y) == '+':
                 return int(self.var + self.delta)
-                #print(1)
+                
             elif self.is_tap(x, y) == '-':
                 
                 return int(self.var - self.delta)
             else:
-                #print(self.var)
+                
                 return int(self.var)
-            
-            
+
+
             
             
             

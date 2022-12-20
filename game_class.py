@@ -28,14 +28,14 @@ class Inf:
         self.deathprobability = 15
         # вероятность смерти
         self.screen = screen
-        self.rinf = 16
+        self.rinf = 6
         self.r = 3
         self.timetogetwell = 25
         self.timetosymptoms = 5
         # определяет амплитуду броуновского движения
         self.broun = 10
         # скорость отвечающая за то, как далеко ходят люди, от 0 до 1
-        self.speed = 0.5
+        self.speed = 0
         # время до появления симптомов
 
     def processing(self, dt):
@@ -99,15 +99,15 @@ class Inf:
         t[6] = Text(self.screen, 'label', 'Амплитуда Броуновского '+
                   'движения(>0) ', 230, self.broun, 10)
         t[7] = Text(self.screen, 'label', 'Люди ходят в гости/посещают'+
-                  ' другие города (0-2)', 260, self.speed, 5)
+                  ' другие города (0-5)', 260, self.speed, 1)
         t[8] = Text(self.screen, 'but', 'старт ', 400)
-        
+
         t[8].pos_x = 400
         t[8].r = 70
         while not stop:
-            
+
             self.screen.fill(WHITE)
-            
+    
             t[0].new_text(self.isolation)
             t[1].new_text(self.amount)
             t[2].new_text(self.rinf)
@@ -116,10 +116,9 @@ class Inf:
             t[5].new_text(self.timetogetwell)
             t[6].new_text(self.broun)
             t[7].new_text(self.speed)
-            
+
             for element in t:
                 element.draw()
-            
 
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
